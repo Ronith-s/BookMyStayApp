@@ -1,97 +1,123 @@
-import java.util.*;
+/**
+ * UseCase2RoomInitialization
+ *
+ * This class demonstrates object-oriented modeling using abstraction,
+ * inheritance, and polymorphism for a Hotel Booking System.
+ *
+ * It initializes different room types and displays their availability.
+ *
+ * @author Ronith
+ * @version 2.1
+ */
 
-class BookMyStayApp {
+// Abstract class representing a general Room
+abstract class Room {
+    private String roomType;
+    private int numberOfBeds;
+    private double pricePerNight;
 
-    // Data Structures
-    private List<Integer> rooms = new ArrayList<>();
-    private Queue<String[]> bookingQueue = new LinkedList<>();
-    private Set<Integer> bookedRooms = new HashSet<>();
-    private Map<Integer, String> bookingMap = new HashMap<>();
-
-    // Add rooms
-    public void addRoom(int roomId) {
-        rooms.add(roomId);
+    // Constructor
+    public Room(String roomType, int numberOfBeds, double pricePerNight) {
+        this.roomType = roomType;
+        this.numberOfBeds = numberOfBeds;
+        this.pricePerNight = pricePerNight;
     }
 
-    // Request booking (FIFO)
-    public void requestBooking(String customerName, int roomId) {
-        bookingQueue.add(new String[]{customerName, String.valueOf(roomId)});
-        System.out.println("Request added: " + customerName + " -> Room " + roomId);
+    // Getters (Encapsulation)
+    public String getRoomType() {
+        return roomType;
     }
 
-    // Process bookings
-    public void processBookings() {
-        while (!bookingQueue.isEmpty()) {
-            String[] request = bookingQueue.poll();
-            String name = request[0];
-            int roomId = Integer.parseInt(request[1]);
-
-            if (!rooms.contains(roomId)) {
-                System.out.println("Room " + roomId + " does not exist.");
-                continue;
-            }
-
-            if (bookedRooms.contains(roomId)) {
-                System.out.println("Room " + roomId + " already booked. Skipping " + name);
-                continue;
-            }
-
-            // Confirm booking
-            bookedRooms.add(roomId);
-            bookingMap.put(roomId, name);
-
-            System.out.println("Booking confirmed: " + name + " -> Room " + roomId);
-        }
+    public int getNumberOfBeds() {
+        return numberOfBeds;
     }
 
-    // Cancel booking
-    public void cancelBooking(int roomId) {
-        if (bookingMap.containsKey(roomId)) {
-            bookingMap.remove(roomId);
-            bookedRooms.remove(roomId);
-            System.out.println("Booking cancelled for Room " + roomId);
-        } else {
-            System.out.println("No booking found for Room " + roomId);
-        }
+    public double getPricePerNight() {
+        return pricePerNight;
     }
 
-    // Display rooms
-    public void displayStatus() {
-        System.out.println("\nRoom Status:");
-        for (int roomId : rooms) {
-            if (bookedRooms.contains(roomId)) {
-                System.out.println("Room " + roomId + " - Booked by " + bookingMap.get(roomId));
-            } else {
-                System.out.println("Room " + roomId + " - Available");
-            }
-        }
+    // Abstract method to display details
+    public abstract void displayDetails();
+}
+
+// Single Room class
+class SingleRoom extends Room {
+
+    public SingleRoom() {
+        super("Single Room", 1, 2000.0);
     }
 
-    // MAIN METHOD
+    @Override
+    public void displayDetails() {
+        System.out.println("Room Type: " + getRoomType());
+        System.out.println("Beds: " + getNumberOfBeds());
+        System.out.println("Price per Night: ₹" + getPricePerNight());
+    }
+}
+
+// Double Room class
+class DoubleRoom extends Room {
+
+    public DoubleRoom() {
+        super("Double Room", 2, 3500.0);
+    }
+
+    @Override
+    public void displayDetails() {
+        System.out.println("Room Type: " + getRoomType());
+        System.out.println("Beds: " + getNumberOfBeds());
+        System.out.println("Price per Night: ₹" + getPricePerNight());
+    }
+}
+
+// Suite Room class
+class SuiteRoom extends Room {
+
+    public SuiteRoom() {
+        super("Suite Room", 3, 6000.0);
+    }
+
+    @Override
+    public void displayDetails() {
+        System.out.println("Room Type: " + getRoomType());
+        System.out.println("Beds: " + getNumberOfBeds());
+        System.out.println("Price per Night: ₹" + getPricePerNight());
+    }
+}
+
+// Main class (Entry Point)
+public class BookMyStayApp {
+
     public static void main(String[] args) {
-        BookMyStayApp system = new BookMyStayApp();
 
-        // Add rooms
-        system.addRoom(101);
-        system.addRoom(102);
-        system.addRoom(103);
+        System.out.println("======================================");
+        System.out.println("   Book My Stay App");
+        System.out.println("   Room Initialization Module");
+        System.out.println("   Version: 2.1");
+        System.out.println("======================================\n");
 
-        // Booking requests
-        system.requestBooking("Alice", 101);
-        system.requestBooking("Bob", 101);   // Duplicate
-        system.requestBooking("Charlie", 102);
-        system.requestBooking("David", 104); // Invalid room
+        // Polymorphism: Using Room reference
+        Room singleRoom = new SingleRoom();
+        Room doubleRoom = new DoubleRoom();
+        Room suiteRoom = new SuiteRoom();
 
-        // Process bookings
-        system.processBookings();
+        // Static availability variables
+        int singleRoomAvailable = 5;
+        int doubleRoomAvailable = 3;
+        int suiteRoomAvailable = 2;
 
-        // Display status
-        system.displayStatus();
+        // Display details
+        System.out.println("---- Room Details & Availability ----\n");
 
-        // Cancel booking
-        system.cancelBooking(101);
+        singleRoom.displayDetails();
+        System.out.println("Available: " + singleRoomAvailable + "\n");
 
-        // Final status
-        system.displayStatus();
+        doubleRoom.displayDetails();
+        System.out.println("Available: " + doubleRoomAvailable + "\n");
+
+        suiteRoom.displayDetails();
+        System.out.println("Available: " + suiteRoomAvailable + "\n");
+
+        System.out.println("Application executed successfully.");
     }
 }
