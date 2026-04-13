@@ -1,97 +1,32 @@
-import java.util.*;
+/**
+ * UseCase1HotelBookingApp
+ *
+ * This class represents the entry point of the Hotel Booking Management System.
+ * It demonstrates the basic structure of a Java application, including the main method,
+ * console output, and JavaDoc documentation.
+ *
+ * The program prints a welcome message along with the application name and version.
+ *
+ * @author Ronith
+ * @version 1.0
+ */
+public class BookMyStayApp {
 
-class BookMyStayApp {
-
-    // Data Structures
-    private List<Integer> rooms = new ArrayList<>();
-    private Queue<String[]> bookingQueue = new LinkedList<>();
-    private Set<Integer> bookedRooms = new HashSet<>();
-    private Map<Integer, String> bookingMap = new HashMap<>();
-
-    // Add rooms
-    public void addRoom(int roomId) {
-        rooms.add(roomId);
-    }
-
-    // Request booking (FIFO)
-    public void requestBooking(String customerName, int roomId) {
-        bookingQueue.add(new String[]{customerName, String.valueOf(roomId)});
-        System.out.println("Request added: " + customerName + " -> Room " + roomId);
-    }
-
-    // Process bookings
-    public void processBookings() {
-        while (!bookingQueue.isEmpty()) {
-            String[] request = bookingQueue.poll();
-            String name = request[0];
-            int roomId = Integer.parseInt(request[1]);
-
-            if (!rooms.contains(roomId)) {
-                System.out.println("Room " + roomId + " does not exist.");
-                continue;
-            }
-
-            if (bookedRooms.contains(roomId)) {
-                System.out.println("Room " + roomId + " already booked. Skipping " + name);
-                continue;
-            }
-
-            // Confirm booking
-            bookedRooms.add(roomId);
-            bookingMap.put(roomId, name);
-
-            System.out.println("Booking confirmed: " + name + " -> Room " + roomId);
-        }
-    }
-
-    // Cancel booking
-    public void cancelBooking(int roomId) {
-        if (bookingMap.containsKey(roomId)) {
-            bookingMap.remove(roomId);
-            bookedRooms.remove(roomId);
-            System.out.println("Booking cancelled for Room " + roomId);
-        } else {
-            System.out.println("No booking found for Room " + roomId);
-        }
-    }
-
-    // Display rooms
-    public void displayStatus() {
-        System.out.println("\nRoom Status:");
-        for (int roomId : rooms) {
-            if (bookedRooms.contains(roomId)) {
-                System.out.println("Room " + roomId + " - Booked by " + bookingMap.get(roomId));
-            } else {
-                System.out.println("Room " + roomId + " - Available");
-            }
-        }
-    }
-
-    // MAIN METHOD
+    /**
+     * Main method - entry point of the application
+     * @param args Command-line arguments (not used in this program)
+     */
     public static void main(String[] args) {
-        BookMyStayApp system = new BookMyStayApp();
 
-        // Add rooms
-        system.addRoom(101);
-        system.addRoom(102);
-        system.addRoom(103);
+        // Display welcome message
+        System.out.println("======================================");
+        System.out.println("   Welcome to Book My Stay App");
+        System.out.println("   Hotel Booking Management System");
+        System.out.println("   Version: 1.0");
+        System.out.println("======================================");
 
-        // Booking requests
-        system.requestBooking("Alice", 101);
-        system.requestBooking("Bob", 101);   // Duplicate
-        system.requestBooking("Charlie", 102);
-        system.requestBooking("David", 104); // Invalid room
-
-        // Process bookings
-        system.processBookings();
-
-        // Display status
-        system.displayStatus();
-
-        // Cancel booking
-        system.cancelBooking(101);
-
-        // Final status
-        system.displayStatus();
+        // Inform user that application has started and ended
+        System.out.println("Application started successfully.");
+        System.out.println("Thank you for using Book My Stay App!");
     }
 }
